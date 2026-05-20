@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# PyInstaller
+mini_configurator/build/
+mini_configurator/dist/
+*.spec.bak
+
+# Logs y temporales
+*.log
+*.txt
+*.etl
+
+# Versiones descargadas del software chino (binarios grandes)
+VERSIONES DESCARGDAS/
+
+# Backups locales
+backup_configurator/
+
+# Scripts de investigacion (no parte del proyecto final)
+scripts/
+
+# Guardian MCP
+.guardian/
+
+# Entornos virtuales
+venv/
+.env/
+env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Windows
+Thumbs.db
+Desktop.ini

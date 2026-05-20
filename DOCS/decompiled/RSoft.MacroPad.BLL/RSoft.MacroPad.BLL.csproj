@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EAE2A9B4-FB1C-4FF6-A90D-7154F4A93E8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RSoft.MacroPad.BLL</RootNamespace>
+    <AssemblyName>RSoft.MacroPad.BLL</AssemblyName>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkIdentifier>.NETCoreApp</TargetFrameworkIdentifier>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HidLibrary">
+      <HintPath>..\..\RSoft.MacroPad.v1.0.1\HidLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections" />
+    <Reference Include="System.Linq" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Runtime.InteropServices" />
+    <Reference Include="System.Text.RegularExpressions" />
+    <Reference Include="System.Threading" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="HidLog.cs" />
+    <Compile Include="HID\DIGCF.cs" />
+    <Compile Include="HID\Hid.cs" />
+    <Compile Include="HID\HIDD_ATTRIBUTES.cs" />
+    <Compile Include="HID\HIDP_CAPS.cs" />
+    <Compile Include="HID\report.cs" />
+    <Compile Include="HID\SP_DEVICE_INTERFACE_DATA.cs" />
+    <Compile Include="HID\SP_DEVICE_INTERFACE_DETAIL_DATA.cs" />
+    <Compile Include="HID\SP_DEVINFO_DATA.cs" />
+    <Compile Include="Infrasturture\ComposerRepository.cs" />
+    <Compile Include="Infrasturture\Configuration\Configuration.cs" />
+    <Compile Include="Infrasturture\Configuration\ConfigurationReader.cs" />
+    <Compile Include="Infrasturture\Model\InputAction.cs" />
+    <Compile Include="Infrasturture\Model\KeyCode.cs" />
+    <Compile Include="Infrasturture\Model\KeyType.cs" />
+    <Compile Include="Infrasturture\Model\LedColor.cs" />
+    <Compile Include="Infrasturture\Model\LedMode.cs" />
+    <Compile Include="Infrasturture\Model\MediaKey.cs" />
+    <Compile Include="Infrasturture\Model\MediaValueAttribute.cs" />
+    <Compile Include="Infrasturture\Model\Modifier.cs" />
+    <Compile Include="Infrasturture\Model\MouseButton.cs" />
+    <Compile Include="Infrasturture\Model\MouseValuesAttribute.cs" />
+    <Compile Include="Infrasturture\Model\ProtocolType.cs" />
+    <Compile Include="Infrasturture\Model\VirtualKey.cs" />
+    <Compile Include="Infrasturture\Model\VirtualKeyMapAttribute.cs" />
+    <Compile Include="Infrasturture\Physical\ControlType.cs" />
+    <Compile Include="Infrasturture\Physical\KeyboardLayout.cs" />
+    <Compile Include="Infrasturture\Physical\LayoutParser.cs" />
+    <Compile Include="Infrasturture\Physical\PhysicalButton.cs" />
+    <Compile Include="Infrasturture\Physical\PhysicalControl.cs" />
+    <Compile Include="Infrasturture\Physical\PhysicalKnob.cs" />
+    <Compile Include="Infrasturture\Physical\Vector.cs" />
+    <Compile Include="Infrasturture\Protocol\ExtendedReport.cs" />
+    <Compile Include="Infrasturture\Protocol\ExtendedReportComposer.cs" />
+    <Compile Include="Infrasturture\Protocol\IReportComposer.cs" />
+    <Compile Include="Infrasturture\Protocol\LegacyReportComposer.cs" />
+    <Compile Include="Infrasturture\Protocol\Legacy\KeyFunctionReport.cs" />
+    <Compile Include="Infrasturture\Protocol\Legacy\LayerSelectionReport.cs" />
+    <Compile Include="Infrasturture\Protocol\Legacy\LedFunctionReport.cs" />
+    <Compile Include="Infrasturture\Protocol\Legacy\MouseFunctionReport.cs" />
+    <Compile Include="Infrasturture\Protocol\Legacy\WriteFlashReport.cs" />
+    <Compile Include="Infrasturture\Protocol\Mappers\InputActionMapper.cs" />
+    <Compile Include="Infrasturture\Protocol\Mappers\KeyCodeMapper.cs" />
+    <Compile Include="Infrasturture\Protocol\Mappers\MediaKeyMapper.cs" />
+    <Compile Include="Infrasturture\Protocol\Mappers\ModifierMapper.cs" />
+    <Compile Include="Infrasturture\Protocol\Mappers\MouseButtonMapper.cs" />
+    <Compile Include="Infrasturture\Protocol\Report.cs" />
+    <Compile Include="Infrasturture\Protocol\ReportComposerBase.cs" />
+    <Compile Include="Infrasturture\Protocol\VersionCheckReport.cs" />
+    <Compile Include="Infrasturture\UsbDevice\DeviceSample.cs" />
+    <Compile Include="Infrasturture\UsbDevice\HidLib.cs" />
+    <Compile Include="Infrasturture\UsbDevice\HidLibUsb.cs" />
+    <Compile Include="Infrasturture\UsbDevice\HidUsb.cs" />
+    <Compile Include="Infrasturture\UsbDevice\IUsb.cs" />
+    <Compile Include="Infrasturture\UsbDevice\UsbBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestedProducts.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
