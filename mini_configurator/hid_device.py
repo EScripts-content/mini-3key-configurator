@@ -118,8 +118,6 @@ class HidDevice:
         if len(packet) > config.PACKET_SIZE:
             packet = packet[:config.PACKET_SIZE]
 
-        print(f"  PKT: {' '.join(f'{b:02X}' for b in packet[:16])}")
-
         buf = (ctypes.c_ubyte * config.PACKET_SIZE)(*packet)
         written = wintypes.DWORD(0)
 

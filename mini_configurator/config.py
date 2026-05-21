@@ -35,9 +35,9 @@ INPUT_ACTIONS = {
     1:  "Boton 1",
     2:  "Boton 2",
     3:  "Boton 3",
-    23: "Knob - Izquierda",
-    24: "Knob - Presionar",
-    25: "Knob - Derecha",
+    13: "Knob - Izquierda",
+    14: "Knob - Presionar",
+    15: "Knob - Derecha",
 }
 
 # Inverso: nombre -> byte
@@ -48,9 +48,9 @@ CONTROLS = [
     (1,  "Boton 1"),
     (2,  "Boton 2"),
     (3,  "Boton 3"),
-    (24, "Knob - Click"),
-    (23, "Knob - Izquierda"),
-    (25, "Knob - Derecha"),
+    (14, "Knob - Click"),
+    (13, "Knob - Izquierda"),
+    (15, "Knob - Derecha"),
 ]
 
 # ============================================
@@ -198,17 +198,17 @@ LED_MODE_NAMES = [
 # COLORES DE UI
 # ============================================
 class Colors:
-    BG_DARK = "#1e1e2e"
-    BG_CARD = "#2a2a3c"
-    BG_BUTTON = "#3a3a5c"
-    BG_BUTTON_HOVER = "#4a4a7c"
-    BG_BUTTON_ACTIVE = "#5a5a9c"
-    ACCENT = "#89b4fa"
-    ACCENT_SECONDARY = "#b4befe"
-    TEXT = "#cdd6f4"
-    TEXT_DIM = "#a6adc8"
-    SUCCESS = "#a6e3a1"
-    WARNING = "#f9e2af"
-    ERROR = "#f38ba8"
-    BORDER = "#45475a"
-    KNOB = "#6c7086"
+    BG_DARK        = "#0d0f12"
+    BG_CARD        = "#13161b"
+    BG_BUTTON      = "#1a1f26"
+    BG_BUTTON_HOVER= "#1f2530"
+    BG_BUTTON_ACTIVE="#252d38"
+    ACCENT         = "#39c0ff"
+    ACCENT_SECONDARY="#6ad7ff"
+    TEXT           = "#f2f5f7"
+    TEXT_DIM       = "#8b98a7"
+    SUCCESS        = "#32d17c"
+    WARNING        = "#f0b429"
+    ERROR          = "#ff5f56"
+    BORDER         = "#2b3440"
+    KNOB           = "#3a4555"
