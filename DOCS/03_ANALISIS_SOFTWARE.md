@@ -1,21 +1,117 @@
 # Analisis del Software Existente
 
-## Software Descargado
+## Software Principal: MINI KeyBoard (Firmware Original)
 
-### 1. RSoft.MacroPad v1.0.1
+**Ubicacion**: `VERSIONES DESCARGDAS/3 key keyboard software-.../Release/`
+
+| Campo | Valor |
+|-------|-------|
+| Nombre | MINI KeyBoard.exe |
+| Plataforma | .NET Framework (C#) |
+| Libreria HID | HidLibrary.dll (terceros) |
+| Estado | **FUNCIONA** (software oficial del fabricante chino) |
+| Modelo | 3 botones + 1 knob (encoder) |
+
+Este es el **software original del dispositivo**. Se descompilo con herramientas .NET para entender el protocolo HID exacto que usa el firmware del controlador.
+
+---
+
+### Archivos Descompilados Clave
+
+| Archivo | Que contiene |
+|---------|-------------|
+| `HIDTester/FormMain.cs` | UI principal, logica de Download, configuracion de controles |
+| `HIDTester/BasicKeys.cs` | Configuracion de teclas basicas (asignacion de shortcuts) |
+| `HIDTester/FunKey.cs` | Teclas de funcion multimedia |
+| `HIDTester/MULKey.cs` | Teclas multi-funcion (macros) |
+| `HIDTester/MouseKey.cs` | Teclas de raton (click, scroll) |
+| `HIDTester/LEDkey.cs` | Control de LEDs del dispositivo |
+| `HIDTester/LayerFun.cs` | Funciones de capas (layers) |
+| `HIDTester/HidLib.cs` | Wrapper sobre HidLibrary.dll |
+
+---
+
+### Descubrimientos del Codigo Descompilado
+
+#### 1. Bytes de Accion (Action Bytes)
+
+El software confirma los indices exactos usados para cada control:
+
+| Control | Action Byte | Nombre en codigo |
+|---------|-------------|------------------|
+| Boton 1 | 1 | Key 1 |
+| Boton 2 | 2 | Key 2 |
+| Boton 3 | 3 | Key 3 |
+| Knob Left | 13 | K1 Left |
+| Knob Press | 14 | K1 Centre |
+| Knob Right | 15 | K1 Right |
+
+**Codigo descompilado**:
+```csharp
+private void K1_Left_Click(object sender, EventArgs e) {
+    KeyParam.Data_Send_Buff[KeyParam.KeySet_KeyNum] = 13; // Knob Left
+}
+
+private void K1_Centre_Click(object sender, EventArgs e) {
+    KeyParam.Data_Send_Buff[KeyParam.KeySet_KeyNum] = 14; // Knob Press
+}
+
+private void K1_Right_Click(object sender, EventArgs e) {
+    KeyParam.Data_Send_Buff[KeyParam.KeySet_KeyNum] = 15; // Knob Right
+}
+```
+
+> **Nota**: En versiones anteriores del firmware se habian visto bytes 23/24/25, pero el software oficial del fabricante usa **13/14/15**. Esto confirma que el firmware correcto para este dispositivo usa 13/14/15.
+
+#### 2. Estructura del Paquete HID
+
+```csharp
+private void Download_Click(object sender, EventArgs e) {
+    byte[] array = new byte[65];      // Report de 65 bytes
+    array[0] = KeyParam.Data_Send_Buff[KeyParam.KeySet_KeyNum]; // Action byte
+    // ... construccion del paquete segun tipo de tecla
+}
+```
+
+**Buffer de envio** (`Data_Send_Buff`):
+- Indice 0: Action byte (1-3, 13-15)
+- Indice 1: KeyType (1=basic, 2=media, 3=mouse, 4=multi)
+- Indices siguientes: keycodes y modifiers
+
+#### 3. Tipos de Tecla Soportados
+
+| KeyType | Valor | Descripcion |
+|---------|-------|-------------|
+| Basic Key | 0x01 | Teclas estandar + modificadores |
+| Media Key | 0x02 | Play, Pause, Vol+, Vol-, Mute |
+| Mouse Key | 0x03 | Click, scroll, move |
+| Multi Key | 0x04 | Macros de multiples teclas |
+
+#### 4. Protocolo de Escritura (WriteFlash)
+
+Despues de enviar la configuracion, el software envia un comando especial para guardar en la memoria flash del dispositivo:
+```csharp
+self.write_report([0xAA, 0xAA]);
+```
+
+---
+
+## Software de Referencia: RSoft.MacroPad v1.0.1
+
 **Ubicacion**: `RSoft.MacroPad.v1.0.1/`
 
 | Campo | Valor |
 |-------|-------|
 | Plataforma | .NET 6.0 |
-| Tipo | Aplicacion de escritorio |
+| Tipo | Aplicacion de escritorio de terceros |
 | Libreria HID | HID.dll (custom) |
 | Estado | **FUNCIONA** (con correccion de config.txt) |
+
+**Nota**: Este software NO es del fabricante original. Es un software de terceros que resulto compatible con el dispositivo y sirvio como **referencia cruzada** para confirmar el protocolo.
 
 **Correccion necesaria**:
 El archivo `config.txt` apuntaba a `mi_00` pero el dispositivo real usa `mi_01`.
 
-Cambio realizado:
 ```
 # Antes (NO funcionaba)
 4489:34960,mi_00,1
@@ -24,102 +120,51 @@ Cambio realizado:
 4489:34960,mi_01,1
 ```
 
-**Protocolo soportado**: Extended (Version 1)
-
-**Archivos clave**:
-- `config.txt`: Configuracion de dispositivos soportados
-- `layouts.txt`: Definicion de layouts visuales
-- `RSoft.MacroPad.BLL.dll`: Logica de negocio (descompilada)
-
-**Codigo descompilado encontrado**:
-- `ExtendedReport.cs`: Constructor de paquetes HID
-- `ExtendedReportComposer.cs`: Compositor de reports
-- `Hid.cs`: Comunicacion HID nativa
-- `InputAction.cs`: Enumeracion de acciones (botones/knobs)
-- `KeyCode.cs`: Codigos de teclas HID
-- `Modifier.cs`: Flags de modificadores (Ctrl, Shift, Alt, Win)
+**Archivos descompilados utiles**:
+- `ExtendedReport.cs`: Confirma estructura de paquetes HID
+- `InputAction.cs`: Confirma enumeracion de acciones
+- `KeyCode.cs`: Confirma mapeo de teclas HID
 
 ---
 
-### 2. MINI KeyBoard Tool V1 (C#)
+## Otros Softwares Analizados
+
+### MINI KeyBoard Tool V1 (C#)
 **Ubicacion**: `MINI KEYBOARD TOOL V1/Release/`
 
-| Campo | Valor |
-|-------|-------|
-| Plataforma | .NET Framework |
-| Libreria | HidLibrary.dll (terceros) |
-| Estado | Varias versiones, algunas con errores conocidos |
+Version anterior/alternativa del software oficial. Tiene errores conocidos (`InvalidOperationException` en `Dispose()`). Usa `HidLibrary.dll`.
 
-**Errores conocidos**:
-- `errorLog.txt` muestra excepcion `InvalidOperationException` en `Dispose()`
-- Problema al cerrar la ventana cuando se esta creando un handle
-
-**Notas**:
-- Usa HidLibrary.dll para comunicacion HID
-- Tiene soporte para multiples modelos
-- Incluye traducciones zh-CN y en-US
-
----
-
-### 3. MINI KeyBoard (Qt5 - Version Vieja)
+### MINI KeyBoard (Qt5 - Version Vieja)
 **Ubicacion**: `Software old version/`
 
-| Campo | Valor |
-|-------|-------|
-| Framework | Qt5.14.2 / Qt5.12.2 |
-| Compilador | MinGW (libgcc, libstdc++) |
-| Libreria HID | hidapi.dll |
-| Estado | **Compilado, funciona standalone** |
+Software legacy en Qt5 con `hidapi.dll`. Probablemente para modelos antiguos.
 
-**Strings encontrados en binario**:
-- `receiveData the value is` - Confirma protocolo bidireccional
-- `command` / `Right command` - Comandos especificos
-- `pushButton_K1` a `pushButton_K15` - Soporta hasta 15 teclas
-- `MiNi KeyBoard` - Nombre del programa
-
-**Notas**:
-- Es un programa Qt5 compilado con MinGW
-- Requiere DLLs de Qt5 para ejecutarse
-- El codigo fuente original esta en los archivos `.o` y `moc_*.cpp`
-- Dialog2 tiene funciones `sendData` y `receiveData`
-
----
-
-### 4. MINI_KEYBOARD (Qt5 - Nov 2025)
+### AX18 (Qt5 - Nov 2025)
 **Ubicacion**: `New_Software nov 2025/AX18.../`
 
-| Campo | Valor |
-|-------|-------|
-| Modelo | AX18 - 15 teclas |
-| Framework | Qt5 |
-| Estado | **Probablemente NO es para este dispositivo** |
-
-**Notas**:
-- Este software es para el modelo AX18 con 15 teclas
-- Probablemente incompatible con el dispositivo de 3 botones + knob
+Software para modelo AX18 (15 teclas), **incompatible** con dispositivo de 3 botones + knob.
 
 ---
 
 ## Comparativa
 
-| Software | Funciona | Protocolo | UI | Estabilidad |
-|----------|----------|-----------|-----|-------------|
-| RSoft.MacroPad | Si (con fix) | Extended | Moderna | Buena |
-| MINI KeyBoard (C#) | Parcial | Desconocido | Basica | Con errores |
-| MINI KeyBoard (Qt5) | Probablemente | Legacy | Qt5 | Desconocida |
-| AX18 (Qt5) | No | - | Qt5 | - |
+| Software | Origen | Funciona | Protocolo | Utilidad |
+|----------|--------|----------|-----------|----------|
+| **MINI KeyBoard** | **Fabricante chino** | **Si** | **Extended** | **Principal: codigo descompilado usado para ingenieria inversa** |
+| RSoft.MacroPad | Terceros | Si (con fix) | Extended | Referencia cruzada |
+| MINI KeyBoard Tool V1 | Fabricante | Parcial | Desconocido | Obsoleto |
+| MINI KeyBoard (Qt5) | Fabricante | Probablemente | Legacy | Obsoleto |
+| AX18 (Qt5) | Fabricante | No | - | Modelo diferente |
+
+---
 
 ## Conclusion del Analisis
 
-**RSoft.MacroPad es la mejor opcion** porque:
-1. Ya soporta exactamente nuestro modelo (3 botones + 1 knob)
-2. Usa el protocolo Extended que desciframos
-3. Tiene codigo .NET descompilable para entender el protocolo
-4. Solo requeria un fix menor en config.txt
-5. Tiene UI mas moderna que los otros
+**MINI KeyBoard (software oficial descompilado) es la fuente principal** porque:
+1. Es el software del fabricante del dispositivo
+2. Confirmo los action bytes correctos: **13/14/15 para knob**
+3. Revelo la estructura exacta del paquete HID (65 bytes, buffer Data_Send_Buff)
+4. Documento los 4 tipos de tecla (Basic, Media, Mouse, Multi)
+5. Confirmo el comando WriteFlash (`0xAA 0xAA`)
 
-**Para crear nuevo software**:
-- Usar el protocolo Extended descifrado de RSoft.MacroPad
-- Implementar comunicacion HID directa con Win32 API
-- Crear UI moderna en Python con tkinter o similar
-- Soportar los 6 controles (3 botones + 3 acciones del knob)
+**RSoft.MacroPad sirvio como validacion cruzada** para confirmar que el protocolo es estandar Extended y no algo propietario del fabricante.
