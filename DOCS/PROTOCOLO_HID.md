@@ -20,7 +20,7 @@ Se envían **`num_keycodes + 1` paquetes** en loop, luego WriteFlash.
 ### Estructura de cada paquete:
 | Byte | Valor | Descripción |
 |------|-------|-------------|
-| `[0]` | key_index | 1=Key1, 2=Key2, 3=Key3 |
+| `[0]` | key_index | 1=Key1, 2=Key2, 3=Key3, 13=KnobLeft, 14=KnobPush, 15=KnobRight |
 | `[1]` | `KeyType & 0x0F` | 1=basic, 2=multimedia, 3=mouse, 8=LED |
 | `[2]` | num_keycodes | Cantidad de keycodes (KeyGroupCharNum) |
 | `[3]` | b | Loop counter (0..num_keycodes) |

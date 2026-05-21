@@ -90,7 +90,7 @@
 **Descubrimientos clave**:
 1. Paquete de 65 bytes: `[ReportID=0x03, 0xFE, Action, Layer, KeyType, DelayLo, DelayHi, 0,0,0, KeyCount, ...keys]`
 2. Botones: Key1=1, Key2=2, Key3=3
-3. Knob: Left=23, Push=24, Right=25
+3. Knob: Left=13, Push=14, Right=15 (corregido: software oficial usa 13/14/15)
 4. Keycodes estandar HID (A=4, B=5, etc.)
 5. Modifiers: Ctrl=1, Shift=2, Alt=4, Win=8
 6. Media keys con valores especificos (PlayPause=205, etc.)

@@ -48,9 +48,9 @@ El dispositivo presenta 2 interfaces HID:
 | Boton 1 | Push | Key1 (1) |
 | Boton 2 | Push | Key2 (2) |
 | Boton 3 | Push | Key3 (3) |
-| Knob | Rotar izquierda | Knob1Left (23) |
-| Knob | Presionar | Knob1Push (24) |
-| Knob | Rotar derecha | Knob1Right (25) |
+| Knob | Rotar izquierda | Knob1Left (13) |
+| Knob | Presionar | Knob1Push (14) |
+| Knob | Rotar derecha | Knob1Right (15) |
 
 ## Capacidades segun layouts.txt
 
