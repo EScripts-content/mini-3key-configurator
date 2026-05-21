@@ -50,15 +50,19 @@ Byte 11+: Key data (pares de [modifier, keycode])
 
 ### Acciones (InputAction enum)
 
+Confirmado por codigo descompilado del software oficial (`FormMain.cs`):
+
 | Valor | Nombre | Descripcion |
 |-------|--------|-------------|
 | 0 | None | Sin accion |
 | 1 | Key1 | Boton 1 |
 | 2 | Key2 | Boton 2 |
 | 3 | Key3 | Boton 3 |
-| 23 | Knob1Left | Knob izquierda (counter-clockwise) |
-| 24 | Knob1Push | Knob presion |
-| 25 | Knob1Right | Knob derecha (clockwise) |
+| 13 | Knob1Left | Knob izquierda (counter-clockwise) |
+| 14 | Knob1Push | Knob presion |
+| 15 | Knob1Right | Knob derecha (clockwise) |
+
+> **Nota**: Versiones anteriores del firmware reportaban bytes 23/24/25, pero el software oficial del fabricante usa **13/14/15**.
 
 ### KeyCode (HID Usage Page Keyboard)
 

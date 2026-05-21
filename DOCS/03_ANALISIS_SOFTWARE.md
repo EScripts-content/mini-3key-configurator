@@ -87,11 +87,68 @@ private void Download_Click(object sender, EventArgs e) {
 | Mouse Key | 0x03 | Click, scroll, move |
 | Multi Key | 0x04 | Macros de multiples teclas |
 
-#### 4. Protocolo de Escritura (WriteFlash)
+#### 4. Secuencia de Envio (Download_Click)
 
-Despues de enviar la configuracion, el software envia un comando especial para guardar en la memoria flash del dispositivo:
+El metodo `Download_Click` en `FormMain.cs` revela la secuencia exacta:
+
+**Paso 1: Preparar el buffer de 65 bytes**
 ```csharp
-self.write_report([0xAA, 0xAA]);
+byte[] array = new byte[65];
+array[0] = KeyParam.Data_Send_Buff[KeyParam.KeySet_KeyNum];  // Action byte (1-3, 13-15)
+```
+
+**Paso 2: Enviar paquetes en bucle**
+
+Para cada tecla en la secuencia, se envia un paquete con:
+- `array[0]` = Action byte (indice del control)
+- `array[1]` = KeyType (1=basic, 2=media, 3=mouse, 4=multi)
+- `array[2]` = Numero de keycodes en la secuencia
+- `array[3]` = Indice del paquete actual (0, 1, 2...)
+- `array[4]` = Modifier del keycode actual
+- `array[5]` = Keycode actual
+
+**Ejemplo: Enviar Ctrl+C al Boton 1**
+```csharp
+// Paquete 0 (primer keycode)
+array[0] = 1;   // Action = Boton 1
+array[1] = 1;   // KeyType = Basic
+array[2] = 1;   // 1 keycode total
+array[3] = 0;   // Paquete 0
+array[4] = 1;   // Modifier = Ctrl
+array[5] = 6;   // Keycode = C
+myHidLib.WriteData(array, 65);  // Enviar 65 bytes
+```
+
+**Paso 3: Comando WriteFlash (guardar en memoria)**
+
+Despues de enviar todos los paquetes, se manda el comando especial para guardar permanentemente:
+```csharp
+// Comando WriteFlash
+array[0] = 0xAA;
+array[1] = 0xAA;
+myHidLib.WriteData(array, 65);
+```
+
+> **Nota**: Este `0xAA 0xAA` es el comando que confirma la escritura en la memoria flash del dispositivo. Sin este comando, los cambios se pierden al desconectar.
+
+#### 5. Tipos de Tecla y Payloads
+
+| KeyType | Valor | Como se envia |
+|---------|-------|---------------|
+| Basic | 0x01 | Modifier + Keycode (pairs) |
+| Media | 0x02 | 4 bytes especiales (play, vol, etc.) |
+| Mouse | 0x03 | Click/scroll/move |
+| Multi | 0x04 | Hasta 5 keycodes consecutivos |
+
+**Basic Key (ejemplo: Ctrl+Shift+T)**:
+```csharp
+array[0] = action;      // 1-3 o 13-15
+array[1] = 1;           // KeyType = Basic
+array[2] = 3;           // 3 keycodes
+array[3] = 0;           // Paquete 0
+array[4] = 0x03;        // Ctrl+Shift (modifiers OR)
+array[5] = 20;          // T
+myHidLib.WriteData(array, 65);
 ```
 
 ---
